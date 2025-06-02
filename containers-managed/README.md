@@ -1,0 +1,1 @@
+#### Ubuntu VM as the Ansible control node, and Docker containers as the managed nodes.

@@ -1,0 +1,14 @@
+docker build -t ansible-node .
+
+docker network create ansible-net
+
+docker run -d --name node1 --network ansible-net -p 2222:22 ansible-node
+
+docker run -d --name node1 --network ansible-net -p 2222:22 ansible-node
+
+ansible -i inventory.ini managed_nodes -m ping
+
+ansible-playbook -i inventory.ini setup-nginx.yml
+
+docker exec -it node1 bash
+curl localhost

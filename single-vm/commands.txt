@@ -1,0 +1,7 @@
+ansible all -i inventory.ini -m ping
+
+ansible all -i inventory.ini -m setup | head -20
+
+ansible-playbook -i inventory.ini hello-world.yml
+
+ansible-playbook -i inventory.ini install-tools.yml --ask-become-pass

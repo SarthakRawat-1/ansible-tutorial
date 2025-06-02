@@ -1,0 +1,23 @@
+---
+- name: Install useful tools
+  hosts: local
+  become: yes  # This means "use sudo"
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+    
+    - name: Install development tools
+      apt:
+        name:
+          - git
+          - curl
+          - wget
+          - tree
+        state: present
+    
+    - name: Create a workspace directory
+      file:
+        path: "{{ ansible_env.HOME }}/workspace"
+        state: directory
+        mode: '0755'

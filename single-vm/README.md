@@ -1,0 +1,1 @@
+#### When using Ansible on a single machine, you're essentially making your Ubuntu VM both the control node (where Ansible runs) and the managed node (the target of your automation). Ansible will connect to "localhost" instead of remote servers.

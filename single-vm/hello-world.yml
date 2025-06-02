@@ -1,0 +1,16 @@
+---
+- name: My first Ansible playbook
+  hosts: local
+  tasks:
+    - name: Create a hello world file
+      copy:
+        content: "Hello from Ansible!\nToday is {{ ansible_date_time.date }}"
+        dest: /tmp/hello-ansible.txt
+    
+    - name: Display the file content
+      command: cat /tmp/hello-ansible.txt
+      register: result
+    
+    - name: Show what we created
+      debug:
+        msg: "{{ result.stdout }}"
