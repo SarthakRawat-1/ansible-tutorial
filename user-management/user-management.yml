@@ -1,0 +1,59 @@
+---
+- name: User Management Playbook
+  hosts: local
+  become: yes 
+  vars:
+    users_to_create:
+      - name: alice
+        comment: "Alice Developer"
+        shell: /bin/bash
+        groups: sudo
+      - name: bob
+        comment: "Bob Tester"
+        shell: /bin/bash
+        groups: users
+      - name: charlie
+        comment: "Charlie Admin"
+        shell: /bin/bash
+        groups: sudo,adm
+  
+  tasks:
+    - name: Create user groups if they don't exist
+      group:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - users
+        - developers
+    
+    - name: Create users
+      user:
+        name: "{{ item.name }}"
+        comment: "{{ item.comment }}"
+        shell: "{{ item.shell }}"
+        groups: "{{ item.groups }}"
+        create_home: yes
+        state: present
+      loop: "{{ users_to_create }}"
+    
+    - name: Set password for alice (demo purposes)
+      user:
+        name: alice
+        password: "{{ 'password123' | password_hash('sha512') }}"
+    
+    - name: Create a shared directory for all users
+      file:
+        path: /home/shared
+        state: directory
+        mode: '0755'
+        owner: root
+        group: users
+    
+    - name: Create individual workspace directories
+      file:
+        path: "/home/{{ item.name }}/workspace"
+        state: directory
+        mode: '0755'
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+      loop: "{{ users_to_create }}"

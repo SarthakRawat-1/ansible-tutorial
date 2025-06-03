@@ -1,0 +1,23 @@
+---
+- name: Remove Users Playbook
+  hosts: local
+  become: yes
+  vars:
+    users_to_remove:
+      - alice
+      - bob
+      - charlie
+  
+  tasks:
+    - name: Remove users and their home directories
+      user:
+        name: "{{ item }}"
+        state: absent
+        remove: yes  
+      loop: "{{ users_to_remove }}"
+    
+    - name: Clean up shared directory if empty
+      file:
+        path: /home/shared
+        state: absent
+      ignore_errors: yes  

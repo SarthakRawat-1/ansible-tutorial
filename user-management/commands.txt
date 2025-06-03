@@ -1,0 +1,17 @@
+ansible-playbook -i inventory.ini user-management.yml --ask-become-pass
+
+cat /etc/passwd | grep -E "(alice|bob|charlie)"
+
+id alice 
+id bob
+id charlie
+
+ls -la /home/
+ls -la /home/alice/
+ls -la /home/bob/
+ls -la /home/shared
+
+su - alice
+whoami
+groups
+exit
