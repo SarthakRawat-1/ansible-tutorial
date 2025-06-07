@@ -1,0 +1,15 @@
+---
+- name: Use collection to manage cron
+  hosts: local
+  become: true
+  collections:
+    - community.general
+
+  tasks:
+    - name: Ensure a cron job exists
+      community.general.cron:
+        name: "Clear tmp folder"
+        minute: "0"
+        hour: "3"
+        job: "rm -rf /tmp/*"
+        state: present

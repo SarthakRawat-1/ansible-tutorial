@@ -1,0 +1,58 @@
+---
+- name: Basic Service Management
+  hosts: local
+  become: yes
+  vars:
+    services_to_install:
+      - nginx
+      - postgresql
+      - redis-server
+      - ufw
+    
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  
+    
+    - name: Install required services
+      apt:
+        name: "{{ services_to_install }}"
+        state: present
+    
+    - name: Start and enable nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+    
+    - name: Start and enable PostgreSQL
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+    
+    - name: Start and enable Redis
+      service:
+        name: redis-server
+        state: started
+        enabled: yes
+    
+    - name: Check service status
+      service_facts:
+    
+    - name: Display nginx service status
+      debug:
+        msg: "Nginx is {{ ansible_facts.services['nginx.service'].state }}"
+      when: "'nginx.service' in ansible_facts.services"
+    
+    - name: Display PostgreSQL service status
+      debug:
+        msg: "PostgreSQL is {{ ansible_facts.services['postgresql.service'].state }}"
+      when: "'postgresql.service' in ansible_facts.services"
+    
+    - name: Enable firewall but don't start it yet
+      service:
+        name: ufw
+        enabled: yes
+        state: stopped
